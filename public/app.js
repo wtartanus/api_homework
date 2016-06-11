@@ -66,22 +66,14 @@ var getPokemonDescription = function(pokemon) {
 //****************************************
 
 //ADD IMAGE TO BACKGROUND*****************
-var addImage = function(object, pokemonName) {
+var addImage = function(http) {
   var body = document.getElementsByTagName('body')[0];
-  console.log(body);
-  var http;
- for (var i = 0; i < object.body.length; i++) {
-   if(object.body[i]["pokemon-name"].toLowerCase() === pokemonName) {
-    body.style.backgroundImage = "url(" + object.body[i]['image-url'] + ")"
-    http = object.body[i]['image-url'];
+    body.style.backgroundImage = "url(" + http + ")"
     
     var pokemon = JSON.parse(localStorage.getItem('pokemon')) || {};
     pokemon.imageUrl = http;
     pokemon.imageUrl = JSON.stringify(http);
     localStorage.setItem('pokemon-imageUrl', pokemon.imageUrl );
-   }
- }
-  
  
 }
 //****************************************
@@ -161,22 +153,24 @@ var requestCall = function(url,callBack) {
 
 //REQUEST POKEMONS IMAGE ***********
 var requestImage = function(pokemonName) {
-   var url = "https://www.tablerig.com/tables/calpaterson/pokemon-with-images";
-   var request = new XMLHttpRequest();
-
-   request.open("Get", url);
-    var result;
+    console.log(pokemonName);
+    var url = "https://www.googleapis.com/customsearch/v1?key=AIzaSyDcewjcNWr02P6fuioswBb5sya93AasbWc&cx=010284551349995783765:wkbvm2xpi5m&searchType=image&q=" + pokemonName;
     
-   request.onload = function() {
+    var request = new XMLHttpRequest();
+
+    request.open("Get", url);
+     var result;
      
-     if(request.status === 200) {
-      console.log("got the data");
-      var jsonString = request.responseText;
-       result = JSON.parse(jsonString);
-       addImage(result,pokemonName);
-     }
-   }
-  request.send(null);
+    request.onload = function() {
+      
+      if(request.status === 200) {
+       console.log("got the data");
+       var jsonString = request.responseText;
+        result = JSON.parse(jsonString);
+        addImage(result.items[0].image.thumbnailLink);
+      }
+    }
+   request.send(null);
 }
 //*********************************
 

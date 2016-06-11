@@ -1,5 +1,7 @@
 body {
   margin: 0;
+  background-repeat: no-repeat;
+  background-position: 30% 25%;
 }
 
 #pokemons-list {
